@@ -1,28 +1,35 @@
-from selenium import webdriver
+import sys, os, subprocess
+from unfollowly import app
+from flask import Flask, render_template, url_for
+import instaloader
 
 class Grab(object):
 	def __init__(self):
 		# open chrome headless
-		op = webdriver.ChromeOptions()
-		op.add_argument('headless')
-		self.driver = webdriver.Chrome(options=op)
-	def print(self, user) -> str:
-		driver = self.driver
-		driver.maximize_window()
-		driver.get(f"https://www.instagram.com/{user}/")
-		return str(driver.page_source)
+		# self.op = webdriver.ChromeOptions()
+		# self.op.add_argument('headless')
+		# self.driver = webdriver.Chrome(options=self.op)
 
-grab = Grab().print("vladusatii_")
+		self.L = instaloader.Instaloader()
 
-from unfollowly import app
-from flask import Flask, render_template
+	def followers(self, username, password) -> str:
+		self.L.login(username, password)
+		profile = instaloader.Profile.from_username(self.L.context, username)
+		followers = ''
+		for follower in profile.get_followers():
+			followers = f'{followers}{follower.username} '
+		return followers
+
+	def profile_picture(self, username: str):
+		self.L.download_profile(username, profile_pic_only=True)
+		subprocess.run(['bash', 'renderProfile.sh', f'{username}'])
+
+grab = Grab()
+pp = grab.profile_picture('vladusatii_')
+
 
 @app.route('/')
-def index(info: str):
-	return render_template('index.html', info=grab)
+def index():
+	# return render_template('index.html', info=grab.followers('vladusatii_', 'fhrg79h3nu9fnr3uj0odsfj@FHJUER(FHNSD')) # high risk operation, can get banned
+	return render_template('index.html')
 
-
-"""
-TODO:
-  - Figure out how to render the output into a variable passed to HTML via werkzeug's url_for()
-"""
