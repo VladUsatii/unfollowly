@@ -1,0 +1,33 @@
+.profilepic {
+  position: fixed;
+  left: 5px; top: 5px;
+  width: 25px; height: 25px;
+  display:block;
+}
+
+.profilename {
+  position:fixed;
+  left: 35px; top: 0px;
+  font-size: 13px;
+  color: black;
+  font-weight: 500;
+  display: block;
+}
+
+/* All generic page styles */
+
+body { font-family: 'Helvetica Neue', sans-serif; }
+
+.title, .subtitle, .warning, .warningtext { position: relative; }
+
+.title, .subtitle, .warning { top: 25px; }
+
+.warning {
+  padding-left: 12.5px;padding-right:12.5px;padding-top:7.5px;padding-bottom:7.5px;
+  margin: 50px;
+  color:white;
+  background-color: #ff5f5f;
+  border: solid 2px white;
+  box-shadow: 0px 0px 1px #555;
+  display:block;
+}

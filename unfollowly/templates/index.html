@@ -1,4 +1,15 @@
 {% extends 'base.html' %}
 	{% block content %}
 		<img class="profilepic" src="{{url_for('static', filename='pp.jpg')}}" />
+		<h3 class="profilename">{{ profilename }}</h3>
+
+		<h1 class="title">unfollowly</h1>
+		<h4 class="subtitle">an unfollower scrape tool that alerts you for every change to your instagram account.</h4>
+		<div class="warning"><p class="warningtext">Note: We only send notifications from the time the unfollowly server is turned on to the time it is turned off. Any offline changes will not be pulled.</p></div>
+
+		<p style="font-weight:500;">All Followers Listed ({{ followers }})</p>
+		{% for follower in follow_list %}
+			<p style="font-weight:300;">{{ follower }}</p>
+		{% endfor %}
+		
 	{% endblock content %}
