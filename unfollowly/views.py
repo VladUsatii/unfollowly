@@ -3,10 +3,10 @@ from unfollowly import app
 from flask import Flask, render_template, url_for
 import instaloader
 from pathlib import Path
+from flask_apscheduler import APScheduler
 
 # pwd
 cwd = os.getcwd()
-
 
 class Grab(object):
 	def __init__(self):
@@ -50,14 +50,41 @@ class Grab(object):
 name = ''
 password = ''
 
+with open('username.txt') as f:
+	name = f.readline()
+	name = name.replace(" ", "")
+
+with open('password.txt') as g:
+	password = g.readline()
+	password = name.replace(" ", "")
+
 grab = Grab()
 pp = grab.profile_picture(name)
 
-gf = grab.get_followers(name, password)
-followers = str(gf[0])
-follow_list = gf[1]
+def events():
+	gf = grab.get_followers(name, password)
+	followers = str(gf[0])
+	follow_list = gf[1]
+
+events()
+
+"""
+events() # init job
+
+@scheduler.task("interval", id="do_job_1", seconds=25, misfire_grace_time=900)
+def job1():
+	events()
+	print("Updated Follower Graph (this process occurs every hour that the server is on")
+
+# parallel schedule reload
+app.config.from_object(Config())
+
+scheduler = APScheduler()
+scheduler.api_enabled = True
+scheduler.init_app(app)
+scheduler.start()
+"""
 
 @app.route('/')
 def index():
 	return render_template('index.html', profilename=name, followers=followers, follow_list=follow_list)
-
